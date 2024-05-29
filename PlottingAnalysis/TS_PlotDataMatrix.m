@@ -326,4 +326,18 @@ else
     ax2.YTickLabel = TimeSeries.Name;
 end
 
+try
+    folder = whatData(1:end-12);
+    % test = strcat(folder,'\\data_mat')
+    % test2 = strcat(folder,"\\data_mat")
+
+    if isfile(strcat(folder,"\\data_mat"))
+        saveas(f,strcat(folder,'\\data_mat1'))
+    else
+        saveas(f,strcat(folder,'\\data_mat'))
+    end
+catch exception
+    pass
+end
+
 end

@@ -306,6 +306,12 @@ function formatYAxisColorBar(doYaxis,offSet)
     allColors = [BF_GetColorMap('spectral',8,0); 0,0,0];
     allColors = allColors([8,1,2,3,4,5,6,7,9],:);
     colormap(allColors(1:maxShow+1,:))
+    try
+        folder = customFile(1:end-10);
+        saveas(f,strcat(folder,'\inspect'))
+    catch exception
+        pass
+    end
 end
 
 % ------------------------------------------------------------------------------

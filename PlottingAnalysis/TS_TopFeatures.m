@@ -249,14 +249,20 @@ end
 
 %-------------------------------------------------------------------------------
 % Give mean and that expected from random classifier (there may be a little overfitting)
+
+folder = fileparts(whatData);
+class_results_txt = fopen(strcat(folder,'\classify_results.txt'),'w');
+total_results_txt = fopen('total_results','a+');
+fprintf(total_results_txt,strcat(folder,": %4.2f\n"),nanmean(testStat));
 if ~isnan(chanceLevel)
-    fprintf(1,['Mean %s across %u features = %4.2f%s\n' ...
+    fprintf(class_results_txt,['Mean %s across %u features = %4.2f%s\n' ...
             '(Random guessing for %u equiprobable classes = %4.2f%s)\n'], ...
         testStatText,numFeatures,nanmean(testStat),statUnit,numClasses,chanceLevel,statUnit);
 else
-    fprintf(1,'Mean %s across %u features = %4.2f%s\n',...
+    fprintf(class_results_txt,'Mean %s across %u features = %4.2f%s\n',...
         testStatText,numFeatures,nanmean(testStat),statUnit);
 end
+
 
 %-------------------------------------------------------------------------------
 %% Display information about the top features (numTopFeatures)
@@ -280,10 +286,12 @@ ifeat = ifeat(~isNaN);
 % List the top features:
 for i = 1:numTopFeatures
     ind = ifeat(i);
-    fprintf(1,'[%u] %s (%s) -- %4.2f%s\n',Operations.ID(ind),...
+    fprintf(class_results_txt,'[%u] %s (%s) -- %4.2f%s\n',Operations.ID(ind),...
             Operations.Name{ind},Operations.Keywords{ind},...
             testStat_sort(i),statUnit);
 end
+fclose(class_results_txt);
+fclose(total_results_txt);
 
 %-------------------------------------------------------------------------------
 %% Define the indices of features we will go on to visualize
@@ -404,6 +412,14 @@ else
     testStat_rand = [];
 end
 
+try
+    folder = whatData(1:end-12);
+    fprintf(folder)
+    saveas(f,strcat(folder,'\classifier_histogram'))
+catch exception
+    pass
+end
+
 %-------------------------------------------------------------------------------
 %% Distributions across classes for top features
 %-------------------------------------------------------------------------------
@@ -437,7 +453,17 @@ if ismember('distributions',whatPlots)
                                                 testStat(featHere(opi)),false);
         end
     end
+
+    try
+    folder = whatData(1:end-12);
+    fprintf(folder)
+    saveas(f,strcat(folder,'\classifier_distributions'))
+    catch exception
+        pass
+    end
 end
+
+
 
 %-------------------------------------------------------------------------------
 %% Data matrix containing top features
@@ -447,6 +473,7 @@ if ismember('datamatrix',whatPlots)
     dataLocal = struct('TS_DataMat',BF_NormalizeMatrix(TS_DataMat(:,featInd(ixFeat)),'maxmin'),...
                     'TimeSeries',TimeSeries,...
                     'Operations',Operations(featInd(ixFeat),:));
+    
     TS_PlotDataMatrix(dataLocal,'colorGroups',true,'groupReorder',true);
 end
 
@@ -527,6 +554,13 @@ if ismember('dendrogram',whatPlots)
         ax.XTickLabel = topFeatureLabelsFull(ord);
         ylabel(sprintf('%s distance',distanceMetric));
         ax.XTickLabelRotation = 40;
+    end
+    try
+    folder = whatData(1:end-12);
+    fprintf(folder)
+    saveas(f,strcat(folder,'\classifier_dendrogram'))
+    catch exception
+        pass
     end
 end
 
