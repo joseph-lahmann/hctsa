@@ -93,11 +93,15 @@ end
 % Plot two-dimensional representation of the data using TS_Plot2d:
 f = TS_Plot2d(lowDimComponents,TimeSeries,componentLabels,annotateParams,showDist,cfnParams);
 try
-    folder = whatData(1:end-12);
-    fprintf(folder)
-    saveas(f,strcat(folder,'\2d_pca'))
+    folder = whatData(1:end-10);
+    add = '';
+    if contains(whatData,'_N')
+        folder = whatData(1:end-12);
+        add = '_norm';
+    end
+    saveas(f,strcat(folder,'\2d_pca',add))
 catch exception
-    pass
+    
 end
 %-------------------------------------------------------------------------------
 % Clear output

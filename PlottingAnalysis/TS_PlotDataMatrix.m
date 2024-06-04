@@ -327,17 +327,20 @@ else
 end
 
 try
-    folder = whatData(1:end-12);
-    % test = strcat(folder,'\\data_mat')
-    % test2 = strcat(folder,"\\data_mat")
+    folder = whatData(1:end-10);
+    add = '';
+    if contains(whatData,'_N')
+        folder = whatData(1:end-12);
+        add = '_norm';
+    end
 
     if isfile(strcat(folder,"\\data_mat"))
-        saveas(f,strcat(folder,'\\data_mat1'))
+        saveas(f,strcat(folder,'\\data_mat1',add))
     else
-        saveas(f,strcat(folder,'\\data_mat'))
+        saveas(f,strcat(folder,'\\data_mat',add))
     end
 catch exception
-    pass
+    fprintf(exception)
 end
 
 end

@@ -383,4 +383,16 @@ else
     end
 end
 
+try
+    folder = whatData(1:end-10);
+    add = '';
+    if contains(whatData,'_N')
+        folder = whatData(1:end-12);
+        add = '_norm';
+    end
+    saveas(f,strcat(folder,'\raw',add,whatTimeSeries))
+catch exception
+    
+end
+
 end

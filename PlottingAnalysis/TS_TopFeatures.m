@@ -251,9 +251,13 @@ end
 % Give mean and that expected from random classifier (there may be a little overfitting)
 
 folder = fileparts(whatData);
-class_results_txt = fopen(strcat(folder,'\classify_results.txt'),'w');
+if contains(whatData,'_N')
+    class_results_txt = fopen(strcat(folder,'\TopFeatures_results_norm.txt'),'w');
+else
+    class_results_txt = fopen(strcat(folder,'\TopFeatures_results.txt'),'w');
+end
 total_results_txt = fopen('total_results','a+');
-fprintf(total_results_txt,strcat(folder,": %4.2f\n"),nanmean(testStat));
+fprintf(total_results_txt,strcat(folder," : top feature : %4.2f\n"),max(testStat));
 if ~isnan(chanceLevel)
     fprintf(class_results_txt,['Mean %s across %u features = %4.2f%s\n' ...
             '(Random guessing for %u equiprobable classes = %4.2f%s)\n'], ...
@@ -413,11 +417,15 @@ else
 end
 
 try
-    folder = whatData(1:end-12);
-    fprintf(folder)
-    saveas(f,strcat(folder,'\classifier_histogram'))
+    folder = whatData(1:end-10);
+    add = '';
+    if contains(whatData,'_N')
+        folder = whatData(1:end-12);
+        add = '_norm';
+    end
+    saveas(f,strcat(folder,'\classifier_histogram',add))
 catch exception
-    pass
+    fprintf(exception)
 end
 
 %-------------------------------------------------------------------------------
@@ -455,11 +463,16 @@ if ismember('distributions',whatPlots)
     end
 
     try
-    folder = whatData(1:end-12);
+    folder = whatData(1:end-10);
+    add = '';
+    if contains(whatData,'_N')
+        folder = whatData(1:end-12);
+        add = '_norm';
+    end
     fprintf(folder)
-    saveas(f,strcat(folder,'\classifier_distributions'))
+    saveas(f,strcat(folder,'\classifier_distributions',add))
     catch exception
-        pass
+        fprinf(exception)
     end
 end
 
@@ -555,10 +568,16 @@ if ismember('dendrogram',whatPlots)
         ylabel(sprintf('%s distance',distanceMetric));
         ax.XTickLabelRotation = 40;
     end
+
     try
-    folder = whatData(1:end-12);
-    fprintf(folder)
-    saveas(f,strcat(folder,'\classifier_dendrogram'))
+    folder = whatData(1:end-10);
+    add = '';
+    if contains(whatData,'_N')
+        folder = whatData(1:end-12);
+        add = '_norm';
+    end
+
+    saveas(f,strcat(folder,'\classifier_dendrogram',add))
     catch exception
         pass
     end

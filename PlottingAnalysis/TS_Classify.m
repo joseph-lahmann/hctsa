@@ -165,6 +165,17 @@ else
 end
 fprintf(1,'Looks good? Don''t forget to compare results using other (simpler) methods...\n');
 
+folder = fileparts(whatData);
+if contains(whatData,'_N')
+    class_results_txt = fopen(strcat(folder,'\classify_results_norm.txt'),'w');
+else
+    class_results_txt = fopen(strcat(folder,'\classify_results.txt'),'w');
+end
+total_results_txt = fopen('total_results','a+');
+fprintf(total_results_txt,strcat(folder,' : classifer : ','%.3f +/- %.3f%s',mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits));
+fprintf(class_results_txt,'%.3f +/- %.3f%s',mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits);
+
+
 %-------------------------------------------------------------------------------
 %% Compute nulls for permutation testing
 %-------------------------------------------------------------------------------
@@ -313,6 +324,19 @@ if doPlot
     end
 end
 
+
+try
+    folder = whatData(1:end-10);
+    add = '';
+    if contains(whatData,'_N')
+        folder = whatData(1:end-12);
+        add = '_norm';
+    end
+    saveas(f_confusion,strcat(folder,'\classify_confusion',add))
+catch exception
+    
+end
+
 %-------------------------------------------------------------------------------
 %% Save trained classifier
 %-------------------------------------------------------------------------------
@@ -346,4 +370,9 @@ if nargout==0
     clear('meanAcc','nullStats','jointClassifier')
 end
 
+
+
+
 end
+
+
