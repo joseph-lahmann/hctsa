@@ -457,6 +457,8 @@ if ismember('distributions',whatPlots)
         % Loop through features
         for opi = 1:length(featHere)
             subplot(ceil(length(featHere)/4),4,opi);
+            me = Operations.Name(featHere(opi))
+            % fprintf(str())
             TS_SingleFeature(data,Operations.ID(featHere(opi)),true,false,...
                                                 testStat(featHere(opi)),false);
         end
