@@ -172,8 +172,8 @@ else
     class_results_txt = fopen(strcat(folder,'\classify_results.txt'),'w');
 end
 total_results_txt = fopen('total_results','a+');
-fprintf(total_results_txt,strcat(folder,' : classifer : ','%.3f +/- %.3f%s',mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits));
-fprintf(class_results_txt,'%.3f +/- %.3f%s',mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits);
+fprintf(total_results_txt,strcat(folder,' : classifer : ','%.3f +/- %.3f%s \n',mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits));
+fprintf(class_results_txt,'%.3f +/- %.3f%s \n',mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits);
 
 
 %-------------------------------------------------------------------------------
