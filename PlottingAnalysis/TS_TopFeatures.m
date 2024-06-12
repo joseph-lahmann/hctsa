@@ -253,11 +253,14 @@ end
 folder = fileparts(whatData);
 if contains(whatData,'_N')
     class_results_txt = fopen(strcat(folder,'\TopFeatures_results_norm.txt'),'w');
+    total_results_txt = fopen('total_results','a+');
+    fprintf(total_results_txt,strcat(folder," : top feature norm : %4.2f \n"),max(testStat));
 else
     class_results_txt = fopen(strcat(folder,'\TopFeatures_results.txt'),'w');
+    total_results_txt = fopen('total_results','a+');
+    fprintf(total_results_txt,strcat(folder," : top feature : %4.2f \n"),max(testStat));
 end
-total_results_txt = fopen('total_results','a+');
-fprintf(total_results_txt,strcat(folder," : top feature : %4.2f\n"),max(testStat));
+
 if ~isnan(chanceLevel)
     fprintf(class_results_txt,['Mean %s across %u features = %4.2f%s\n' ...
             '(Random guessing for %u equiprobable classes = %4.2f%s)\n'], ...
