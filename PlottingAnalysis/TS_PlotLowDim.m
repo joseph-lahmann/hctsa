@@ -99,7 +99,8 @@ try
         folder = whatData(1:end-12);
         add = '_norm';
     end
-    saveas(f,strcat(folder,'\2d_pca',add))
+    filename = strcat(folder,'\',whatAlgorithm,'_',add)
+    saveas(f,filename)
 catch exception
     
 end

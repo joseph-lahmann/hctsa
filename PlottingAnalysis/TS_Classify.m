@@ -175,11 +175,12 @@ else
     total_results_txt = fopen('total_results','a+');
     fprintf(total_results_txt,strcat(folder,' : classifer : ','%.3f +/- %.3f%s \n'),mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits);
 end
-total_results_txt = fopen('total_results','a+');
-fprintf(total_results_txt,strcat(folder,' : classifer : ','%.3f +/- %.3f%s \n'),mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits);
+% total_results_txt = fopen('total_results','a+');
+% fprintf(total_results_txt,strcat(folder,' : classifer : ','%.3f +/- %.3f%s \n'),mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits);
 fprintf(class_results_txt,'%.3f +/- %.3f%s',mean(meanAcc),mean(stdAcc),cfnParams.whatLossUnits);
 
 fclose(total_results_txt);
+fclose(class_results_txt);
 %-------------------------------------------------------------------------------
 %% Compute nulls for permutation testing
 %-------------------------------------------------------------------------------
@@ -284,6 +285,7 @@ end
 % Convert real and predicted class labels to matrix form (numClasses x N),
 % required as input to plotconfusion:
 realLabels = TimeSeries.Group;
+datapoints = TimeSeries.Name;
 
 % Predict from the first CV-partition:
 if cfnParams.numFolds > 0
@@ -292,6 +294,21 @@ if cfnParams.numFolds > 0
 else
     predictLabels = predict(CVMdl{1},TS_DataMat);
 end
+
+if contains(whatData,'_N')
+    class_results_txt = fopen(strcat(folder,'\classify_results_norm.txt'),'a+');
+    fprintf(class_results_txt,'\nName \t Pred \t Act \n');
+
+    for i=1:length(datapoints)
+        flag = '';
+        if predictLabels(i) ~= realLabels(i)
+            flag = ' WRONG ';
+        end
+        fprintf(class_results_txt,'%s \t %s \t %s \t %s \n',string(datapoints(i)),string(predictLabels(i)),string(realLabels(i)),flag);
+    end
+end
+fclose(class_results_txt);
+
 
 if doPlot
     if exist('confusionchart','file') == 0 && exist('plotconfusion','file') == 0

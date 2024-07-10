@@ -21,7 +21,8 @@ for i = 1:length(files)
         distanceMetricCol = 'corr_fast'; % a (poor) approximation of correlations with NaNs
         linkageMethodCol = 'average'; % linkage method
         
-        TS_Init(files(i).name,{'INP_mops_catch22.txt','INP_ops_catch22.txt'},[0,0,0],customfile)
+        % TS_Init(files(i).name,{'INP_mops_catch22.txt','INP_ops_catch22.txt'},[0,0,0],customfile)
+        TS_Init(files(i).name,{'INP_mops_less.txt','INP_ops_less.txt'},[0,0,0],customfile)
         % TS_Init(files(i).name,{'INP_mops_hctsa.txt','INP_ops_hctsa.txt'},[0,0,0],customfile)
 
         TS_Compute(true,[],[],'missing',customfile) % args are (parallel?, TS index range, op id index range, custome .mat file to operate on)
